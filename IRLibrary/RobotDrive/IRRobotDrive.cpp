@@ -217,10 +217,10 @@ void IRRobotDrive::ArcadeDrive(float moveValue, float rotateValue, float modifie
  */
 void IRRobotDrive::SetOutputMotors(float output)
 {
-	m_rearLeftMotor.Set(output, m_syncGroup);
-	m_rearRightMotor.Set(output, m_syncGroup);
-	m_frontLeftMotor.Set(output, m_syncGroup);
-	m_frontRightMotor.Set(output, m_syncGroup);
+	m_rearLeftMotor.Set(output);
+	m_rearRightMotor.Set(output);
+	m_frontLeftMotor.Set(output);
+	m_frontRightMotor.Set(output);
 }
 
 /** Set the speed of the right and left motors.
@@ -232,9 +232,9 @@ void IRRobotDrive::SetOutputMotors(float output)
  */
 void IRRobotDrive::SetOutputMotors(float leftOutput, float rightOutput)
 {
-	m_rearLeftMotor.Set(leftOutput, m_syncGroup);
-	m_rearRightMotor.Set(rightOutput, m_syncGroup);
-	m_frontLeftMotor.Set(leftOutput, m_syncGroup);
-	m_frontRightMotor.Set(rightOutput, m_syncGroup);
+	m_rearLeftMotor.Set(leftOutput);
+	m_rearRightMotor.Set(rightOutput);
+	m_frontLeftMotor.Set(leftOutput);
+	m_frontRightMotor.Set(rightOutput);
 }
 

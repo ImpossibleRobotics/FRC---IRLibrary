@@ -37,7 +37,7 @@ public:
 	bool GetTriggerLeft();
 
 	bool GetTop();
-	bool GetBumper();
+//	bool GetBumper();
 
 	bool GetRawButton(uint32_t button);
 

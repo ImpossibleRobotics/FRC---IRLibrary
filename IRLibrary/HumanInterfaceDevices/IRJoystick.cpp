@@ -152,15 +152,6 @@ bool IRJoystick::GetTop()
 }
 
 /**
- * Get the bumper value of the current joystick.
- * This depends on the mapping of the joystick connected to the current port.
- */
-bool IRJoystick::GetBumper()
-{
-	return joystick.GetBumper();
-}
-
-/**
  * Get the POV value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */

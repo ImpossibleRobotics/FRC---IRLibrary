@@ -41,8 +41,6 @@ protected:
 	Talon m_rearLeftMotor;
 	Talon m_rearRightMotor;
 
-	uint8_t m_syncGroup = 0;
-
 	float m_sensitivity = 0.5;
 };
 
