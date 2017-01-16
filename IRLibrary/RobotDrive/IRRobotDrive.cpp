@@ -19,6 +19,7 @@ using namespace IR;
  * Set up parameters for a four wheel drive system where all four motor
  * pwm channels are specified in the call.
  * This call assumes Talons for controlling the motors.
+ * Also to specify the DriveTrain type.
  * @param frontLeftMotor Front left motor channel number. 0-9 are on-board,
  * 10-19 are on the MXP port
  * @param rearLeftMotor Rear Left motor channel number. 0-9 are on-board, 10-19
@@ -27,13 +28,16 @@ using namespace IR;
  * 10-19 are on the MXP port
  * @param rearRightMotor Rear Right motor channel number. 0-9 are on-board,
  * 10-19 are on the MXP port
+ * @param driveTrain use this to set drivetrain type. Default = Tank
  */
 IRRobotDrive::IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
-				uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel) :
+				uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel, DriveTrain driveTrain = Tank) :
+				m_driveTrain(driveTrain),
 				m_frontLeftMotor(frontLeftMotorChannel),
 				m_frontRightMotor(frontRightMotorChannel),
 				m_rearLeftMotor(rearLeftMotorChannel),
 				m_rearRightMotor(rearRightMotorChannel)
+
 {
 	SetOutputMotors(0.0, 0.0);
 }

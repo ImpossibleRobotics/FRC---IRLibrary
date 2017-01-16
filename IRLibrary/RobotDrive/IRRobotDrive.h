@@ -14,10 +14,16 @@
 
 namespace IR {
 
+enum DriveTrain {
+	Tank,
+	Mecanum,
+	Swerve
+};
+
 	class IRRobotDrive{
 	public:
 		IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
-					 uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel);
+							 uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel, DriveTrain driveTrain);
 
 		void SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight);
 		void SetMotorsInverted(bool inverted);
@@ -37,6 +43,8 @@ namespace IR {
 		void Drive(float outputeMagnitude, float curve);
 
 	protected:
+
+		DriveTrain m_driveTrain;
 
 		frc::Talon m_frontLeftMotor;
 		frc::Talon m_frontRightMotor;
