@@ -7,8 +7,9 @@
 
 #include "IRJoystick.h"
 
-#include "WPILIB.h"
+#include <Joystick.h>
 
+using namespace IR;
 
 /**
  * Construct an instance of a joystick.

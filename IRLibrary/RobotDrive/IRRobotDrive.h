@@ -5,43 +5,44 @@
  *      Author: Dylan Vos
  */
 
-#ifndef IRLIBRARY_IRROBOTDRIVE_H_
-#define IRLIBRARY_IRROBOTDRIVE_H_
+#pragma once
 
-#include "WPILIB.h"
+#include <GenericHID.h>
+#include <Talon.h>
 
-#include "../HumanInterfaceDevices/IRJoystick.h"
+#include <../IRLibrary/HumanInterfaceDevices/IRJoystick.h>
 
-class IRRobotDrive{
-public:
-	IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
-	             uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel);
+namespace IR {
 
-	void SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight);
-	void SetMotorsInverted(bool inverted);
+	class IRRobotDrive{
+	public:
+		IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
+					 uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel);
 
-	void SetOutputMotors(float output);
-	void SetOutputMotors(float leftOutput, float rightOutput);
+		void SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight);
+		void SetMotorsInverted(bool inverted);
 
-	void ArcadeDrive(GenericHID *stick);
-	void ArcadeDrive(IRJoystick *stick);
-	void ArcadeDrive(GenericHID &stick);
-	void ArcadeDrive(IRJoystick &stick);
-	void ArcadeDrive(IRJoystick *stick, bool deadZoned);
-	void ArcadeDrive(IRJoystick &stick, bool deadZoned);
-	void ArcadeDrive(float moveValue, float rotateValue);
-	void ArcadeDrive(float moveValue, float rotateValue, float modifierValue);
+		void SetOutputMotors(float output);
+		void SetOutputMotors(float leftOutput, float rightOutput);
 
-	void Drive(float outputeMagnitude, float curve);
+		void ArcadeDrive(frc::GenericHID *stick);
+		void ArcadeDrive(IR::IRJoystick *stick);
+		void ArcadeDrive(frc::GenericHID &stick);
+		void ArcadeDrive(IR::IRJoystick &stick);
+		void ArcadeDrive(IR::IRJoystick *stick, bool deadZoned);
+		void ArcadeDrive(IR::IRJoystick &stick, bool deadZoned);
+		void ArcadeDrive(float moveValue, float rotateValue);
+		void ArcadeDrive(float moveValue, float rotateValue, float modifierValue);
 
-protected:
+		void Drive(float outputeMagnitude, float curve);
 
-	Talon m_frontLeftMotor;
-	Talon m_frontRightMotor;
-	Talon m_rearLeftMotor;
-	Talon m_rearRightMotor;
+	protected:
 
-	float m_sensitivity = 0.5;
-};
+		frc::Talon m_frontLeftMotor;
+		frc::Talon m_frontRightMotor;
+		frc::Talon m_rearLeftMotor;
+		frc::Talon m_rearRightMotor;
 
-#endif /* IRLIBRARY_IRROBOTDRIVE_H_ */
+		float m_sensitivity = 0.5;
+	};
+}

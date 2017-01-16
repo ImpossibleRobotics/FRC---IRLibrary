@@ -5,14 +5,14 @@
  *      Author: Dylan Vos
  */
 
-#include "IRRobotDrive.h"
+#include <../IRLibrary/RobotDrive/IRRobotDrive.h>
 
-#include "WPILIB.h"
+#include <GenericHID.h>
+#include <Talon.h>
 
-#include "../HumanInterfaceDevices/IRJoystick.h"
+#include <../IRLibrary/HumanInterfaceDevices/IRJoystick.h>
 
-#undef max
-
+using namespace IR;
 
 /**
  * Constructor for RobotDrive with 4 motors specified with channel numbers.
@@ -103,7 +103,7 @@ void IRRobotDrive::Drive(float outputMagnitude, float curve) {
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(GenericHID *stick)
+void IRRobotDrive::ArcadeDrive(frc::GenericHID *stick)
 {
 	ArcadeDrive(stick->GetY(), stick->GetX());
 }
@@ -118,7 +118,7 @@ void IRRobotDrive::ArcadeDrive(GenericHID *stick)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(GenericHID &stick)
+void IRRobotDrive::ArcadeDrive(frc::GenericHID &stick)
 {
 	ArcadeDrive(stick.GetY(), stick.GetX());
 }
@@ -133,7 +133,7 @@ void IRRobotDrive::ArcadeDrive(GenericHID &stick)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IRJoystick *stick)
+void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick)
 {
 	ArcadeDrive(stick->GetY(), stick->GetX(), stick->GetLeveledThrottle());
 }
@@ -148,7 +148,7 @@ void IRRobotDrive::ArcadeDrive(IRJoystick *stick)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IRJoystick &stick)
+void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick)
 {
 	ArcadeDrive(stick.GetY(), stick.GetX(), stick.GetLeveledThrottle());
 }
@@ -163,7 +163,7 @@ void IRRobotDrive::ArcadeDrive(IRJoystick &stick)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IRJoystick *stick, bool deadZoned)
+void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned)
 {
 	ArcadeDrive((deadZoned) ? stick->GetYDeadZoned() : stick->GetY(), (deadZoned) ? stick->GetYDeadZoned() : stick->GetX(), stick->GetLeveledThrottle());
 }
@@ -178,7 +178,7 @@ void IRRobotDrive::ArcadeDrive(IRJoystick *stick, bool deadZoned)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IRJoystick &stick, bool deadZoned)
+void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned)
 {
 	ArcadeDrive((deadZoned) ? stick.GetYDeadZoned() : stick.GetY(), (deadZoned) ? stick.GetXDeadZoned() : stick.GetX(), stick.GetLeveledThrottle());
 }

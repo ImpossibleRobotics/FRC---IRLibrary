@@ -5,51 +5,50 @@
  *      Author: Dylan Vos
  */
 
-#ifndef IRLIBRARY_IRJOYSTICK_H_
-#define IRLIBRARY_IRJOYSTICK_H_
+#pragma once
 
-#include "WPILIB.h"
+#include <Joystick.h>
 
-class IRJoystick
-{
-public:
-	static const uint32_t kDefaultThrottleAxis = 3;
+namespace IR {
+
+	class IRJoystick
+	{
+	public:
+		static const uint32_t kDefaultThrottleAxis = 3;
 
 
-	IRJoystick(uint32_t port);
+		IRJoystick(uint32_t port);
 
-	float GetY();
-	float GetX();
-	float GetZ();
+		float GetY();
+		float GetX();
+		float GetZ();
 
-	float GetYDeadZoned();
-	float GetXDeadZoned();
-	float GetZDeadZoned();
+		float GetYDeadZoned();
+		float GetXDeadZoned();
+		float GetZDeadZoned();
 
-	float GetTwist();
-	float GetRawAxis(uint32_t axis);
+		float GetTwist();
+		float GetRawAxis(uint32_t axis);
 
-	float GetThrottle();
-	float GetLeveledThrottle();
+		float GetThrottle();
+		float GetLeveledThrottle();
 
-	bool GetTrigger();
-	bool GetTriggerRight();
-	bool GetTriggerLeft();
+		bool GetTrigger();
+		bool GetTriggerRight();
+		bool GetTriggerLeft();
 
-	bool GetTop();
-//	bool GetBumper();
+		bool GetTop();
 
-	bool GetRawButton(uint32_t button);
+		bool GetRawButton(uint32_t button);
 
-	int GetPOV();
+		int GetPOV();
 
-	float LevelOut(float value);
+		float LevelOut(float value);
 
-protected:
-	Joystick joystick;
+	protected:
+		frc::Joystick joystick;
 
-	static constexpr float kTriggerDeadZone = 0.6;
-	static constexpr float kAxisDeadZone = 0.001;
-};
-
-#endif /* IRLIBRARY_IRJOYSTICK_H_ */
+		static constexpr float kTriggerDeadZone = 0.6;
+		static constexpr float kAxisDeadZone = 0.001;
+	};
+}
