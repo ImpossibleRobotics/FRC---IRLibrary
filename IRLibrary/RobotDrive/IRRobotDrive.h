@@ -40,7 +40,9 @@ enum DriveTrain {
 		void ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyro = 0.0);
 		void ArcadeDrive(double x, double y, double z, double gyro = 0.0, double t = 1.0);
 
-		void Drive(float outputeMagnitude, float curve);
+		void Drive(double outputeMagnitude, double curve);
+
+		void Drive(double direction, double speed, double rotation, double gyro = 0.0); //Mainly meant for driving with Mecanum wheels
 
 		double Limit(double num);
 		void Normalize(double* wheelSpeeds);

@@ -11,6 +11,7 @@
 #include <Talon.h>
 #include <Utility.h>
 #include <HAL/HAL.h>
+#include <math.h>
 
 #include <../IRLibrary/HumanInterfaceDevices/IRJoystick.h>
 
@@ -77,7 +78,7 @@ void IRRobotDrive::SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRi
  * Conversely, turn radius r = -ln(curve)*w for a given value of curve and
  * wheelbase w.
  */
-void IRRobotDrive::Drive(float outputMagnitude, float curve) {
+void IRRobotDrive::Drive(double outputMagnitude, double curve) {
   float leftOutput, rightOutput;
 
   if (curve < 0) {
@@ -97,6 +98,22 @@ void IRRobotDrive::Drive(float outputMagnitude, float curve) {
     rightOutput = outputMagnitude;
   }
   SetOutputMotors(leftOutput, rightOutput);
+}
+
+void IRRobotDrive::Drive(double direction, double speed, double rotation, double gyro) {
+  speed = Limit(speed) * std::sqrt(2.0);
+  // The rollers are at 45 degree angles.
+  double dirInRad = (direction + 45.0) * M_PI / 180.0;
+  double cosD = std::cos(dirInRad);
+  double sinD = std::sin(dirInRad);
+
+  double wheelSpeeds[4];
+  wheelSpeeds[0] = sinD * speed + rotation;
+  wheelSpeeds[1] = cosD * speed + rotation;
+  wheelSpeeds[2] = cosD * speed - rotation;
+  wheelSpeeds[3] = sinD * speed - rotation;
+
+  SetOutputMotors(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 }
 
 /**
@@ -201,14 +218,15 @@ void IRRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gy
 	switch(m_driveTrain){
 	case Tank:
 		{
-			float leftMotorsOutput = -(t * (y - x));
-			float rightMotorsOutput = t * (y + x);
+			float leftMotorsOutput = Limit(-(t * (y - x)));
+			float rightMotorsOutput = Limit(t * (y + x));
 
 			SetOutputMotors(leftMotorsOutput, rightMotorsOutput);
 			break;
 		}
 	case Mecanum:
 		{
+			// Compenstate for gyro angle.
 			RotateVector(x, y, gyro);
 
 			double wheelSpeeds[4];
@@ -308,8 +326,8 @@ void IRRobotDrive::Normalize(double* wheelSpeeds) {
  * Rotate a vector in Cartesian space.
  */
 void IRRobotDrive::RotateVector(double& x, double& y, double angle) {
-  double cosA = std::cos(angle * (3.14159 / 180.0));
-  double sinA = std::sin(angle * (3.14159 / 180.0));
+  double cosA = std::cos(angle * (M_PI / 180.0));
+  double sinA = std::sin(angle * (M_PI / 180.0));
   double xOut = x * cosA - y * sinA;
   double yOut = x * sinA + y * cosA;
   x = xOut;
