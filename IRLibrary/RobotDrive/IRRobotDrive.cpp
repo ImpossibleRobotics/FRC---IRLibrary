@@ -9,6 +9,7 @@
 
 #include <GenericHID.h>
 #include <Talon.h>
+#include <VictorSP.h>
 #include <Utility.h>
 #include <HAL/HAL.h>
 #include <math.h>
@@ -38,10 +39,10 @@ IRRobotDrive::IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMoto
 				m_driveTrain(driveTrain)
 
 {
-	m_rearLeftMotor = std::make_shared<Talon>(rearLeftMotorChannel);
-	m_rearRightMotor = std::make_shared<Talon>(rearRightMotorChannel);
-	m_frontLeftMotor = std::make_shared<Talon>(frontLeftMotorChannel);
-	m_frontRightMotor = std::make_shared<Talon>(frontRightMotorChannel);
+	m_rearLeftMotor = std::make_shared<VictorSP>(rearLeftMotorChannel);
+	m_rearRightMotor = std::make_shared<VictorSP>(rearRightMotorChannel);
+	m_frontLeftMotor = std::make_shared<VictorSP>(frontLeftMotorChannel);
+	m_frontRightMotor = std::make_shared<VictorSP>(frontRightMotorChannel);
 	SetOutputMotors(0.0, 0.0);
 }
 
