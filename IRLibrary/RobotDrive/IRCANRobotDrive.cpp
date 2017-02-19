@@ -12,6 +12,8 @@
 #include <HAL/HAL.h>
 #include <math.h>
 
+#include <SmartDashboard/SmartDashboard.h>
+
 #include <CanTalonSRX.h>
 
 #include "../HumanInterfaceDevices/IRJoystick.h"
@@ -237,6 +239,8 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 			wheelSpeeds[1] = (-x + y + z) * t; //rearLeft
 			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
 			wheelSpeeds[3] = (x + y - z) * t; //rearRight
+
+			SmartDashboard::PutNumberArray("Output", wheelSpeeds);
 
 			Normalize(wheelSpeeds);
 
