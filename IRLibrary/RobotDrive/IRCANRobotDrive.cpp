@@ -14,7 +14,7 @@
 
 #include <SmartDashboard/SmartDashboard.h>
 
-#include <CanTalonSRX.h>
+#include <CanTalon.h>
 
 #include "../HumanInterfaceDevices/IRJoystick.h"
 

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <GenericHID.h>
-#include <CanTalonSRX.h>
+#include <CANTalon.h>
 
 #include "../HumanInterfaceDevices/IRJoystick.h"
 
@@ -50,10 +50,10 @@ enum DriveTrain {
 
 	protected:
 
-		CanTalonSRX m_frontLeftMotor;
-		CanTalonSRX m_rearLeftMotor;
-		CanTalonSRX m_frontRightMotor;
-		CanTalonSRX m_rearRightMotor;
+		CANTalon m_frontLeftMotor;
+		CANTalon m_rearLeftMotor;
+		CANTalon m_frontRightMotor;
+		CANTalon m_rearRightMotor;
 
 		DriveTrain m_driveTrain;
 
