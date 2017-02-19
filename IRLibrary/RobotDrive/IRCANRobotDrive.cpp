@@ -221,6 +221,13 @@ void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double 
 void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gyro)
 {
 	SmartDashboard::PutNumber("DriveTrain", m_driveTrain);
+
+	SmartDashboard::PutNumber("X", x);
+	SmartDashboard::PutNumber("Y", y);
+	SmartDashboard::PutNumber("Z", z);
+	SmartDashboard::PutNumber("T", t);
+	SmartDashboard::PutNumber("T", gyro);
+
 	switch(m_driveTrain){
 	case Tank:
 		{
