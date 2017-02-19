@@ -8,7 +8,7 @@
 #pragma once
 
 #include <GenericHID.h>
-#include <SpeedController.h>
+#include <CanTalonSRX.h>
 
 #include "../HumanInterfaceDevices/IRJoystick.h"
 
@@ -20,9 +20,9 @@ enum DriveTrain {
 	Swerve
 };
 
-	class IRRobotDrive{
+	class IRCANRobotDrive{
 	public:
-		IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
+		IRCANRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
 							 uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel, DriveTrain driveTrain = Tank);
 
 		void SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight);
@@ -50,12 +50,17 @@ enum DriveTrain {
 
 	protected:
 
+		CanTalonSRX m_frontLeftMotor;
+		CanTalonSRX m_rearLeftMotor;
+		CanTalonSRX m_frontRightMotor;
+		CanTalonSRX m_rearRightMotor;
+
 		DriveTrain m_driveTrain;
 
-		std::shared_ptr<SpeedController> m_frontLeftMotor;
-		std::shared_ptr<SpeedController> m_frontRightMotor;
-		std::shared_ptr<SpeedController> m_rearLeftMotor;
-		std::shared_ptr<SpeedController> m_rearRightMotor;
+		bool m_invertedFrontLeftMotor = false;
+		bool m_invertedFrontRightMotor = false;
+		bool m_invertedRearLeftMotor = false;
+		bool m_invertedRearRightMotor = false;
 
 		float m_sensitivity = 0.5;
 
@@ -63,11 +68,11 @@ enum DriveTrain {
 
 	private:
 	 int GetNumMotors() {
-	   int motors = 0;
-	   if (m_frontLeftMotor) motors++;
-	   if (m_frontRightMotor) motors++;
-	   if (m_rearLeftMotor) motors++;
-	   if (m_rearRightMotor) motors++;
+	   int motors = 4;
+//	   if (m_frontLeftMotor != NULL) motors++;
+//	   if (m_frontRightMotor) motors++;
+//	   if (m_rearLeftMotor) motors++;
+//	   if (m_rearRightMotor) motors++;
 	   return motors;
 	 }
 };

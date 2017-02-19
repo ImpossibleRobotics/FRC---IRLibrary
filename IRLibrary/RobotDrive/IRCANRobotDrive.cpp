@@ -5,18 +5,20 @@
  *      Author: Dylan Vos
  */
 
-#include "IRRobotDrive.h"
+#include "IRCANRobotDrive.h"
 
 #include <GenericHID.h>
 #include <Utility.h>
 #include <HAL/HAL.h>
 #include <math.h>
 
-#include <VictorSP.h>
+#include <CanTalonSRX.h>
 
 #include "../HumanInterfaceDevices/IRJoystick.h"
 
 using namespace IR;
+
+#define INVERT(x, y) (x-(2*y*x))
 
 /**
  * Constructor for RobotDrive with 4 motors specified with channel numbers.
@@ -34,29 +36,29 @@ using namespace IR;
  * 10-19 are on the MXP port
  * @param driveTrain use this to set drivetrain type. Default = Tank
  */
-IRRobotDrive::IRRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
+IRCANRobotDrive::IRCANRobotDrive(uint32_t frontLeftMotorChannel, uint32_t rearLeftMotorChannel,
 				uint32_t frontRightMotorChannel, uint32_t rearRightMotorChannel, DriveTrain driveTrain) :
+				m_frontLeftMotor(frontLeftMotorChannel),
+				m_rearLeftMotor(rearLeftMotorChannel),
+				m_frontRightMotor(frontRightMotorChannel),
+				m_rearRightMotor(rearRightMotorChannel),
 				m_driveTrain(driveTrain)
 
 {
-	m_rearLeftMotor = std::make_shared<VictorSP>(rearLeftMotorChannel);
-	m_rearRightMotor = std::make_shared<VictorSP>(rearRightMotorChannel);
-	m_frontLeftMotor = std::make_shared<VictorSP>(frontLeftMotorChannel);
-	m_frontRightMotor = std::make_shared<VictorSP>(frontRightMotorChannel);
 	SetOutputMotors(0.0, 0.0);
 }
 
-void IRRobotDrive::SetMotorsInverted(bool inverted)
+void IRCANRobotDrive::SetMotorsInverted(bool inverted)
 {
 	SetMotorsInverted(inverted, inverted, inverted, inverted);
 }
 
-void IRRobotDrive::SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight)
+void IRCANRobotDrive::SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRight, bool rearRight)
 {
-	m_frontLeftMotor->SetInverted(frontLeft);
-	m_frontRightMotor->SetInverted(frontRight);
-	m_rearLeftMotor->SetInverted(rearLeft);
-	m_rearRightMotor->SetInverted(rearRight);
+	m_invertedFrontLeftMotor = frontLeft;
+	m_invertedFrontRightMotor = frontRight;
+	m_invertedRearLeftMotor = rearLeft;
+	m_invertedRearRightMotor = rearRight;
 }
 
 /**
@@ -79,7 +81,7 @@ void IRRobotDrive::SetMotorsInverted(bool frontLeft, bool rearLeft, bool frontRi
  * Conversely, turn radius r = -ln(curve)*w for a given value of curve and
  * wheelbase w.
  */
-void IRRobotDrive::Drive(double outputMagnitude, double curve) {
+void IRCANRobotDrive::Drive(double outputMagnitude, double curve) {
   float leftOutput, rightOutput;
 
   if (curve < 0) {
@@ -101,7 +103,7 @@ void IRRobotDrive::Drive(double outputMagnitude, double curve) {
   SetOutputMotors(leftOutput, rightOutput);
 }
 
-void IRRobotDrive::Drive(double direction, double speed, double rotation, double gyro) {
+void IRCANRobotDrive::Drive(double direction, double speed, double rotation, double gyro) {
   speed = Limit(speed) * std::sqrt(2.0);
   // The rollers are at 45 degree angles.
   double dirInRad = (direction + 45.0) * M_PI / 180.0;
@@ -127,7 +129,7 @@ void IRRobotDrive::Drive(double direction, double speed, double rotation, double
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
+void IRCANRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
 {
 	ArcadeDrive(stick->GetY(), stick->GetX(), 0.0, gyro);
 }
@@ -142,7 +144,7 @@ void IRRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
+void IRCANRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
 {
 	ArcadeDrive(stick.GetY(), stick.GetX(), 0.0, gyro);
 }
@@ -157,7 +159,7 @@ void IRRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
+void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
 {
 	ArcadeDrive(stick->GetY(), stick->GetX(), stick->GetZ(), gyro, stick->GetLeveledThrottle());
 }
@@ -172,7 +174,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
+void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
 {
 	ArcadeDrive(stick.GetY(), stick.GetX(), stick.GetZ(), gyro, stick.GetLeveledThrottle());
 }
@@ -187,7 +189,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyro)
+void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyro)
 {
 	ArcadeDrive((deadZoned) ? stick->GetXDeadZoned() : stick->GetX(), (deadZoned) ? stick->GetYDeadZoned() : stick->GetY(), stick->GetZ(), gyro, stick->GetLeveledThrottle());
 }
@@ -202,7 +204,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyr
  * will be selected
  * for forwards/backwards and the X-axis will be selected for rotation rate.
  */
-void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyro)
+void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyro)
 {
 	ArcadeDrive((deadZoned) ? stick.GetXDeadZoned() : stick.GetX(), (deadZoned) ? stick.GetYDeadZoned() : stick.GetY(), stick.GetZ(), gyro, stick.GetLeveledThrottle());
 }
@@ -214,7 +216,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyr
  * @param x The value to use for the rotate right/left
  * @param t The value to use for the speedmodifier
  */
-void IRRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gyro)
+void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gyro)
 {
 	switch(m_driveTrain){
 	case Tank:
@@ -255,12 +257,12 @@ void IRRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gy
  * and includes flipping the direction of one side for opposing motors.
  * @param output The speed to send to the motors.
  */
-void IRRobotDrive::SetOutputMotors(float output)
+void IRCANRobotDrive::SetOutputMotors(float output)
 {
-	m_rearLeftMotor->Set(output);
-	m_rearRightMotor->Set(output);
-	m_frontLeftMotor->Set(output);
-	m_frontRightMotor->Set(output);
+	m_rearLeftMotor.Set(INVERT(output, m_invertedRearLeftMotor));
+	m_rearRightMotor.Set(INVERT(output, m_invertedRearRightMotor));
+	m_frontLeftMotor.Set(INVERT(output, m_invertedFrontLeftMotor));
+	m_frontRightMotor.Set(INVERT(output, m_invertedFrontRightMotor));
 }
 
 /** Set the speed of the right and left motors.
@@ -270,12 +272,12 @@ void IRRobotDrive::SetOutputMotors(float output)
  * @param leftOutput The speed to send to the left side of the robot.
  * @param rightOutput The speed to send to the right side of the robot.
  */
-void IRRobotDrive::SetOutputMotors(float leftOutput, float rightOutput)
+void IRCANRobotDrive::SetOutputMotors(float leftOutput, float rightOutput)
 {
-	m_rearLeftMotor->Set(leftOutput);
-	m_rearRightMotor->Set(rightOutput);
-	m_frontLeftMotor->Set(leftOutput);
-	m_frontRightMotor->Set(rightOutput);
+	m_rearLeftMotor.Set(INVERT(leftOutput, m_invertedRearLeftMotor));
+	m_rearRightMotor.Set(INVERT(rightOutput, m_invertedRearRightMotor));
+	m_frontLeftMotor.Set(INVERT(leftOutput, m_invertedFrontLeftMotor));
+	m_frontRightMotor.Set(INVERT(rightOutput, m_invertedFrontRightMotor));
 }
 
 /** Set the speed of the right and left motors.
@@ -286,17 +288,17 @@ void IRRobotDrive::SetOutputMotors(float leftOutput, float rightOutput)
  * @param frontRightOutput The speed to send to the front right side of the robot.
  * @param rearRightOutput The speed to send to the rear right side of the robot.
  */
-void IRRobotDrive::SetOutputMotors(float frontLeftOutput,float rearLeftOutput, float frontRightOutput, float rearRightOutput){
-	m_frontLeftMotor->Set(frontLeftOutput);
-	m_rearLeftMotor->Set(rearLeftOutput);
-	m_frontRightMotor->Set(frontRightOutput);
-	m_rearRightMotor->Set(rearRightOutput);
+void IRCANRobotDrive::SetOutputMotors(float frontLeftOutput,float rearLeftOutput, float frontRightOutput, float rearRightOutput){
+	m_rearLeftMotor.Set(INVERT(rearLeftOutput, m_invertedRearLeftMotor));
+	m_rearRightMotor.Set(INVERT(rearRightOutput, m_invertedRearRightMotor));
+	m_frontLeftMotor.Set(INVERT(frontLeftOutput, m_invertedFrontLeftMotor));
+	m_frontRightMotor.Set(INVERT(frontRightOutput, m_invertedFrontRightMotor));
 }
 
 /**
  * Limit motor values to the -1.0 to +1.0 range.
  */
-double IRRobotDrive::Limit(double num) {
+double IRCANRobotDrive::Limit(double num) {
   if (num > 1.0) {
     return 1.0;
   }
@@ -309,7 +311,7 @@ double IRRobotDrive::Limit(double num) {
 /**
  * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
  */
-void IRRobotDrive::Normalize(double* wheelSpeeds) {
+void IRCANRobotDrive::Normalize(double* wheelSpeeds) {
   double maxMagnitude = std::fabs(wheelSpeeds[0]);
   int i;
   for (i = 1; i < m_numMotors; i++) {
@@ -326,7 +328,7 @@ void IRRobotDrive::Normalize(double* wheelSpeeds) {
 /**
  * Rotate a vector in Cartesian space.
  */
-void IRRobotDrive::RotateVector(double& x, double& y, double angle) {
+void IRCANRobotDrive::RotateVector(double& x, double& y, double angle) {
   double cosA = std::cos(angle * (M_PI / 180.0));
   double sinA = std::sin(angle * (M_PI / 180.0));
   double xOut = x * cosA - y * sinA;
