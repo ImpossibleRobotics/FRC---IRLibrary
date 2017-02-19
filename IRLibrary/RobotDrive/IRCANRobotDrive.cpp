@@ -241,7 +241,10 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
 			wheelSpeeds[3] = (x + y - z) * t; //rearRight
 
-			SmartDashboard::PutNumberArray("Output", wheelSpeeds);
+			SmartDashboard::PutNumber("FL", wheelSpeeds[0]);
+			SmartDashboard::PutNumber("RL", wheelSpeeds[1]);
+			SmartDashboard::PutNumber("FR", wheelSpeeds[2]);
+			SmartDashboard::PutNumber("RR", wheelSpeeds[3]);
 
 			Normalize(wheelSpeeds);
 
