@@ -242,20 +242,25 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 			// Compenstate for gyro angle.
 			RotateVector(x, y, gyro);
 
-			double wheelSpeeds[4];
-			wheelSpeeds[0] = (x + y + z) * t; //frontLeft
-			wheelSpeeds[1] = (-x + y + z) * t; //rearLeft
-			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
-			wheelSpeeds[3] = (x + y - z) * t; //rearRight
+//			double wheelSpeeds[4];
+//			wheelSpeeds[0] = (x + y + z) * t; //frontLeft
+//			wheelSpeeds[1] = (-x + y + z) * t; //rearLeft
+//			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
+//			wheelSpeeds[3] = (x + y - z) * t; //rearRight
 
-			SmartDashboard::PutNumber("FL", wheelSpeeds[0]);
-			SmartDashboard::PutNumber("RL", wheelSpeeds[1]);
-			SmartDashboard::PutNumber("FR", wheelSpeeds[2]);
-			SmartDashboard::PutNumber("RR", wheelSpeeds[3]);
+			double FL = (x + y + z) * t; //frontLeft
+			double RL = (-x + y + z) * t; //rearLeft
+			double FR = (-x + y - z) * t; //frontRight
+			double RR = (x + y - z) * t; //rearRight
 
-			Normalize(wheelSpeeds);
+			SmartDashboard::PutNumber("FL", FL);
+			SmartDashboard::PutNumber("RL", RL);
+			SmartDashboard::PutNumber("FR", FR);
+			SmartDashboard::PutNumber("RR", RR);
 
-			SetOutputMotors(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
+//			Normalize(wheelSpeeds);
+
+			SetOutputMotors(FL, RL, FR, RR);
 
 			break;
 		}
