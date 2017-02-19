@@ -351,8 +351,8 @@ void IRCANRobotDrive::Normalize(double* wheelSpeeds) {
 void IRCANRobotDrive::RotateVector(double& x, double& y, double angle) {
   double cosA = std::cos(angle * (M_PI / 180.0));
   double sinA = std::sin(angle * (M_PI / 180.0));
-  double xOut = x * cosA - y * sinA;
-  double yOut = x * sinA + y * cosA;
+  double xOut = (x * cosA) - (y * sinA);
+  double yOut = (x * sinA) + (y * cosA);
   x = xOut;
   y = yOut;
 }
