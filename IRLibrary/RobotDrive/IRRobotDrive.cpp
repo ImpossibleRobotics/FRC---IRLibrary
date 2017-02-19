@@ -129,7 +129,7 @@ void IRRobotDrive::Drive(double direction, double speed, double rotation, double
  */
 void IRRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
 {
-	ArcadeDrive(stick->GetY(), stick->GetX(), 0.0, gyro);
+	ArcadeDrive(stick->GetX(), stick->GetY(), 0.0, 1.0, gyro);
 }
 
 /**
@@ -144,7 +144,7 @@ void IRRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
  */
 void IRRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
 {
-	ArcadeDrive(stick.GetY(), stick.GetX(), 0.0, gyro);
+	ArcadeDrive(stick.GetX(), stick.GetY(), 0.0, 1.0, gyro);
 }
 
 /**
@@ -159,7 +159,7 @@ void IRRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
  */
 void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
 {
-	ArcadeDrive(stick->GetY(), stick->GetX(), stick->GetZ(), gyro, stick->GetLeveledThrottle());
+	ArcadeDrive(stick->GetX(), stick->GetY(), stick->GetZ(), stick->GetLeveledThrottle(), gyro);
 }
 
 /**
@@ -174,7 +174,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
  */
 void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
 {
-	ArcadeDrive(stick.GetY(), stick.GetX(), stick.GetZ(), gyro, stick.GetLeveledThrottle());
+	ArcadeDrive(stick.GetX(), stick.GetY(), stick.GetZ(), stick.GetLeveledThrottle(), gyro);
 }
 
 /**
@@ -189,7 +189,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
  */
 void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyro)
 {
-	ArcadeDrive((deadZoned) ? stick->GetXDeadZoned() : stick->GetX(), (deadZoned) ? stick->GetYDeadZoned() : stick->GetY(), stick->GetZ(), gyro, stick->GetLeveledThrottle());
+	ArcadeDrive((deadZoned) ? stick->GetXDeadZoned() : stick->GetX(), (deadZoned) ? stick->GetYDeadZoned() : stick->GetY(), stick->GetZ(), stick->GetLeveledThrottle(), gyro);
 }
 
 /**
@@ -204,7 +204,7 @@ void IRRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyr
  */
 void IRRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyro)
 {
-	ArcadeDrive((deadZoned) ? stick.GetXDeadZoned() : stick.GetX(), (deadZoned) ? stick.GetYDeadZoned() : stick.GetY(), stick.GetZ(), gyro, stick.GetLeveledThrottle());
+	ArcadeDrive((deadZoned) ? stick.GetXDeadZoned() : stick.GetX(), (deadZoned) ? stick.GetYDeadZoned() : stick.GetY(), stick.GetZ(), stick.GetLeveledThrottle(), gyro);
 }
 
 /**

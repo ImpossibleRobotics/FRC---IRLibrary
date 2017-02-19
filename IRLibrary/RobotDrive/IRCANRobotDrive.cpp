@@ -133,7 +133,7 @@ void IRCANRobotDrive::Drive(double direction, double speed, double rotation, dou
  */
 void IRCANRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
 {
-	ArcadeDrive(stick->GetY(), stick->GetX(), 1.0, gyro);
+	ArcadeDrive(stick->GetX(), stick->GetY(), 0.0, 1.0, gyro);
 }
 
 /**
@@ -148,7 +148,7 @@ void IRCANRobotDrive::ArcadeDrive(frc::GenericHID *stick, double gyro)
  */
 void IRCANRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
 {
-	ArcadeDrive(stick.GetY(), stick.GetX(), 1.0, gyro);
+	ArcadeDrive(stick.GetX(), stick.GetY(), 0.0, 1.0, gyro);
 }
 
 /**
@@ -163,7 +163,7 @@ void IRCANRobotDrive::ArcadeDrive(frc::GenericHID &stick, double gyro)
  */
 void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
 {
-	ArcadeDrive(stick->GetY(), stick->GetX(), stick->GetZ(), stick->GetLeveledThrottle(), gyro);
+	ArcadeDrive(stick->GetX(), stick->GetY(), stick->GetZ(), stick->GetLeveledThrottle(), gyro);
 }
 
 /**
@@ -178,7 +178,7 @@ void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, double gyro)
  */
 void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
 {
-	ArcadeDrive(stick.GetY(), stick.GetX(), stick.GetZ(), stick.GetLeveledThrottle(), gyro);
+	ArcadeDrive(stick.GetX(), stick.GetY(), stick.GetZ(), stick.GetLeveledThrottle(), gyro);
 }
 
 /**
@@ -242,25 +242,31 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 			// Compenstate for gyro angle.
 			RotateVector(x, y, gyro);
 
-//			double wheelSpeeds[4];
-//			wheelSpeeds[0] = (x + y + z) * t; //frontLeft
-//			wheelSpeeds[1] = (-x + y + z) * t; //rearLeft
-//			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
-//			wheelSpeeds[3] = (x + y - z) * t; //rearRight
+			double wheelSpeeds[4];
+			wheelSpeeds[0] = (x + y + z) * t; //frontLeft
+			wheelSpeeds[1] = (-x + y + z) * t; //rearLeft
+			wheelSpeeds[2] = (-x + y - z) * t; //frontRight
+			wheelSpeeds[3] = (x + y - z) * t; //rearRight
 
-			double FL = (x + y + z) * t; //frontLeft
-			double RL = (-x + y + z) * t; //rearLeft
-			double FR = (-x + y - z) * t; //frontRight
-			double RR = (x + y - z) * t; //rearRight
+//			double FL = (x + y + z) * t; //frontLeft
+//			double RL = (-x + y + z) * t; //rearLeft
+//			double FR = (-x + y - z) * t; //frontRight
+//			double RR = (x + y - z) * t; //rearRight
+//
+//			SmartDashboard::PutNumber("FL", FL);
+//			SmartDashboard::PutNumber("RL", RL);
+//			SmartDashboard::PutNumber("FR", FR);
+//			SmartDashboard::PutNumber("RR", RR);
 
-			SmartDashboard::PutNumber("FL", FL);
-			SmartDashboard::PutNumber("RL", RL);
-			SmartDashboard::PutNumber("FR", FR);
-			SmartDashboard::PutNumber("RR", RR);
+			SmartDashboard::PutNumber("FL-WS", wheelSpeeds[0]);
+			SmartDashboard::PutNumber("RL-WS", wheelSpeeds[1]);
+			SmartDashboard::PutNumber("FR-WS", wheelSpeeds[2]);
+			SmartDashboard::PutNumber("RR-WS", wheelSpeeds[3]);
 
-//			Normalize(wheelSpeeds);
+			Normalize(wheelSpeeds);
 
-			SetOutputMotors(FL, RL, FR, RR);
+//			SetOutputMotors(FL, RL, FR, RR);
+			SetOutputMotors(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
 			break;
 		}
