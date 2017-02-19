@@ -226,7 +226,7 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 	SmartDashboard::PutNumber("Y", y);
 	SmartDashboard::PutNumber("Z", z);
 	SmartDashboard::PutNumber("T", t);
-	SmartDashboard::PutNumber("T", gyro);
+	SmartDashboard::PutNumber("G", gyro);
 
 	switch(m_driveTrain){
 	case Tank:
