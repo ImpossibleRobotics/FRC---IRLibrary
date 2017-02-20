@@ -19,19 +19,19 @@ namespace IR {
 
 		IRJoystick(uint32_t port);
 
-		float GetY();
-		float GetX();
-		float GetZ();
+		double GetY();
+		double GetX();
+		double GetZ();
 
-		float GetYDeadZoned();
-		float GetXDeadZoned();
-		float GetZDeadZoned();
+		double GetYDeadZoned();
+		double GetXDeadZoned();
+		double GetZDeadZoned();
 
-		float GetTwist();
-		float GetRawAxis(uint32_t axis);
+		double GetTwist();
+		double GetRawAxis(uint32_t axis);
 
-		float GetThrottle();
-		float GetLeveledThrottle();
+		double GetThrottle();
+		double GetLeveledThrottle();
 
 		bool GetTrigger();
 		bool GetTriggerRight();
@@ -43,12 +43,13 @@ namespace IR {
 
 		int GetPOV();
 
-		float LevelOut(float value);
+		double LevelOut(double value);
+		double abs(double value);
 
 	protected:
 		frc::Joystick joystick;
 
 		static constexpr float kTriggerDeadZone = 0.6;
-		static constexpr float kAxisDeadZone = 0.001;
+		static constexpr float kAxisDeadZone = 0.10;
 	};
 }

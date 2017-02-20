@@ -193,7 +193,11 @@ void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, double gyro)
  */
 void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double gyro)
 {
-	ArcadeDrive((deadZoned) ? stick->GetXDeadZoned() : stick->GetX(), (deadZoned) ? stick->GetYDeadZoned() : stick->GetY(), stick->GetZ(), stick->GetLeveledThrottle(), gyro);
+	ArcadeDrive((deadZoned) ? stick->GetXDeadZoned() : stick->GetX(),
+				(deadZoned) ? stick->GetYDeadZoned() : stick->GetY(),
+				(deadZoned) ? stick->GetZDeadZoned() : stick->GetZ(),
+							stick->GetLeveledThrottle(),
+							gyro);
 }
 
 /**
@@ -208,7 +212,11 @@ void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick *stick, bool deadZoned, double 
  */
 void IRCANRobotDrive::ArcadeDrive(IR::IRJoystick &stick, bool deadZoned, double gyro)
 {
-	ArcadeDrive((deadZoned) ? stick.GetXDeadZoned() : stick.GetX(), (deadZoned) ? stick.GetYDeadZoned() : stick.GetY(), stick.GetZ(), stick.GetLeveledThrottle(), gyro);
+	ArcadeDrive((deadZoned) ? stick.GetXDeadZoned() : stick.GetX(),
+				(deadZoned) ? stick.GetYDeadZoned() : stick.GetY(),
+				(deadZoned) ? stick.GetZDeadZoned() : stick.GetZ(),
+							stick.GetLeveledThrottle(),
+							gyro);
 }
 
 /**

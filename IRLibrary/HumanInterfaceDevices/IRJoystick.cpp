@@ -11,6 +11,8 @@
 
 using namespace IR;
 
+#define ABS(x) ((x < 0) ? -x : x)
+
 /**
  * Construct an instance of a joystick.
  * The joystick index is the usb port on the drivers station.
@@ -26,7 +28,7 @@ IRJoystick::IRJoystick(uint32_t port) :
  * Get the X value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetX()
+double IRJoystick::GetX()
 {
 	return joystick.GetX();
 }
@@ -35,7 +37,7 @@ float IRJoystick::GetX()
  * Get the Y value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetY()
+double IRJoystick::GetY()
 {
 	return joystick.GetY();
 }
@@ -44,7 +46,7 @@ float IRJoystick::GetY()
  * Get the Z value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetZ()
+double IRJoystick::GetZ()
 {
 	return joystick.GetZ();
 }
@@ -53,30 +55,30 @@ float IRJoystick::GetZ()
  * Get the X value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetXDeadZoned()
+double IRJoystick::GetXDeadZoned()
 {
-	return (LevelOut(joystick.GetX()) > kAxisDeadZone) ? joystick.GetX() : 0.0;
+	return (abs(joystick.GetX()) > kAxisDeadZone) ? joystick.GetX() : 0.0;
 }
 
 /**
  * Get the Y value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetYDeadZoned()
+double IRJoystick::GetYDeadZoned()
 {
-	return (LevelOut(joystick.GetY()) > kAxisDeadZone) ? joystick.GetY() : 0.0;
+	return (abs(joystick.GetY()) > kAxisDeadZone) ? joystick.GetY() : 0.0;
 }
 
 /**
  * Get the Z value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetZDeadZoned()
+double IRJoystick::GetZDeadZoned()
 {
-	return (LevelOut(joystick.GetZ()) > kAxisDeadZone) ? joystick.GetZ() : 0.0;
+	return (abs(joystick.GetZ()) > kAxisDeadZone) ? joystick.GetZ() : 0.0;
 }
 
-float IRJoystick::GetRawAxis(uint32_t axis)
+double IRJoystick::GetRawAxis(uint32_t axis)
 {
 	return joystick.GetRawAxis(axis);
 }
@@ -85,7 +87,7 @@ float IRJoystick::GetRawAxis(uint32_t axis)
  * Get the twist value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetTwist()
+double IRJoystick::GetTwist()
 {
 	return joystick.GetTwist();
 }
@@ -94,7 +96,7 @@ float IRJoystick::GetTwist()
  * Get the throttle value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetThrottle()
+double IRJoystick::GetThrottle()
 {
 	return joystick.GetThrottle();
 }
@@ -104,7 +106,7 @@ float IRJoystick::GetThrottle()
  * This value is level to get a value back between 0 and 1.
  * This depends on the mapping of the joystick connected to the current port.
  */
-float IRJoystick::GetLeveledThrottle()
+double IRJoystick::GetLeveledThrottle()
 {
 	return LevelOut(joystick.GetThrottle());
 }
@@ -161,7 +163,11 @@ int IRJoystick::GetPOV()
 	return joystick.GetPOV();
 }
 
-float IRJoystick::LevelOut(float value)
+double IRJoystick::LevelOut(double value)
 {
 	return (value - 1) / -2;
+}
+
+double IRJoystick::abs(double value){
+	return ABS(value);
 }
