@@ -50,6 +50,6 @@ namespace IR {
 		frc::Joystick joystick;
 
 		static constexpr float kTriggerDeadZone = 0.6;
-		static constexpr float kAxisDeadZone = 0.10;
+		static constexpr float kAxisDeadZone = 0.20;
 	};
 }

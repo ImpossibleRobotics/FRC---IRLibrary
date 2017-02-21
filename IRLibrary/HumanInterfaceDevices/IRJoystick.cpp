@@ -39,7 +39,7 @@ double IRJoystick::GetX()
  */
 double IRJoystick::GetY()
 {
-	return joystick.GetY();
+	return -joystick.GetY();
 }
 
 /**
@@ -66,7 +66,7 @@ double IRJoystick::GetXDeadZoned()
  */
 double IRJoystick::GetYDeadZoned()
 {
-	return (abs(joystick.GetY()) > kAxisDeadZone) ? joystick.GetY() : 0.0;
+	return -((abs(joystick.GetY()) > kAxisDeadZone) ? joystick.GetY() : 0.0);
 }
 
 /**
