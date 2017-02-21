@@ -247,6 +247,14 @@ void IRCANRobotDrive::ArcadeDrive(double x, double y, double z, double t, double
 		}
 	case Mecanum:
 		{
+			static double fakeGyro = 0;
+			fakeGyro += -z;
+			if(fakeGyro >= 360.0) fakeGyro = 0.0;
+			if(fakeGyro < 0.0) fakeGyro = 360.0;
+
+
+			SmartDashboard::PutNumber("fG", fakeGyro);
+//			gyro = fakeGyro;
 			// Compenstate for gyro angle.
 			RotateVector(x, y, gyro);
 
