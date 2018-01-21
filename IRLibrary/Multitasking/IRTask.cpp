@@ -7,7 +7,7 @@
 
 #include "IRTask.h"
 #include <string.h>
-#include <Utility.h>
+#include <RobotController.h>
 #include <Timer.h>
 
 namespace IR {
@@ -16,7 +16,7 @@ IRTask::IRTask(const char* taskName) {
 	char old_name[128];
 
 	if(!taskName){
-		sprintf(old_name, "IRTask-%llu", frc::GetFPGATime());
+		sprintf(old_name, "IRTask-%llu", RobotController::GetFPGATime());
 	}
 
 	enabled_ = false;
