@@ -23,12 +23,20 @@ namespace IR {
 		double GetX();
 		double GetZ();
 
+		double GetY2();
+		double GetX2();
+
 		double GetYDeadZoned();
 		double GetXDeadZoned();
 		double GetZDeadZoned();
 
+		double GetY2DeadZoned();
+		double GetX2DeadZoned();
+
 		double GetTwist();
 		double GetRawAxis(uint32_t axis);
+
+		double GetRawAxisDeadzoned(uint32_t axis);
 
 		double GetThrottle();
 		double GetLeveledThrottle();
@@ -51,5 +59,7 @@ namespace IR {
 
 		static constexpr float kTriggerDeadZone = 0.6;
 		static constexpr float kAxisDeadZone = 0.20;
+		static constexpr uint32_t x2Axis = 3;
+		static constexpr uint32_t y2Axis = 4;
 	};
 }

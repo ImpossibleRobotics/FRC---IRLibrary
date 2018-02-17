@@ -257,6 +257,49 @@ void IRRobotDrive::ArcadeDrive(double x, double y, double z, double t, double gy
 	}
 }
 
+void IRRobotDrive::TankDrive(frc::GenericHID *stick)
+{
+	TankDrive(stick->GetY(), stick->GetRawAxis(4));
+}
+
+void IRRobotDrive::TankDrive(frc::GenericHID &stick)
+{
+	TankDrive(stick.GetY(), stick.GetRawAxis(4));
+}
+
+void IRRobotDrive::TankDrive(IR::IRJoystick *stick)
+{
+	TankDrive(stick->GetY(), stick->GetY2(), stick->GetLeveledThrottle());
+}
+
+
+void IRRobotDrive::TankDrive(IR::IRJoystick &stick)
+{
+	TankDrive(stick.GetY(), stick.GetY2(), stick.GetLeveledThrottle());
+}
+
+void IRRobotDrive::TankDrive(IR::IRJoystick *stick, bool deadZoned)
+{
+	TankDrive((deadZoned) ? stick->GetYDeadZoned() : stick->GetY(),
+			  (deadZoned) ? stick->GetY2DeadZoned() : stick->GetY2(),
+								stick->GetLeveledThrottle());
+}
+
+void IRRobotDrive::TankDrive(IR::IRJoystick &stick, bool deadZoned)
+{
+	TankDrive((deadZoned) ? stick.GetYDeadZoned() : stick.GetY(),
+			  (deadZoned) ? stick.GetY2DeadZoned() : stick.GetY2(),
+							stick.GetLeveledThrottle());
+}
+
+void IRRobotDrive::TankDrive(double y1, double y2, double t)
+{
+	float leftMotorsOutput = Limit(-(t * y1));
+	float rightMotorsOutput = Limit(t * y2);
+
+	SetOutputMotors(leftMotorsOutput, rightMotorsOutput);
+}
+
 /** Set the speed of the right and left motors.
  * This is used once an appropriate drive setup function is called such as
  * TwoWheelDrive(). The motors are set to "leftOutput" and "rightOutput"

@@ -52,12 +52,30 @@ double IRJoystick::GetZ()
 }
 
 /**
+ * Get the X2 value of the current joystick.
+ * This depends on the mapping of the joystick connected to the current port.
+ */
+double IRJoystick::GetX2()
+{
+	return joystick.GetRawAxis(x2Axis);
+}
+
+/**
+ * Get the Y2 value of the current joystick.
+ * This depends on the mapping of the joystick connected to the current port.
+ */
+double IRJoystick::GetY2()
+{
+	return -joystick.GetRawAxis(y2Axis);
+}
+
+/**
  * Get the X value of the current joystick.
  * This depends on the mapping of the joystick connected to the current port.
  */
 double IRJoystick::GetXDeadZoned()
 {
-	return (abs(joystick.GetX()) > kAxisDeadZone) ? joystick.GetX() : 0.0;
+	return (abs(GetX()) > kAxisDeadZone) ? GetX() : 0.0;
 }
 
 /**
@@ -66,7 +84,7 @@ double IRJoystick::GetXDeadZoned()
  */
 double IRJoystick::GetYDeadZoned()
 {
-	return -((abs(joystick.GetY()) > kAxisDeadZone) ? joystick.GetY() : 0.0);
+	return -((abs(GetY()) > kAxisDeadZone) ? GetY() : 0.0);
 }
 
 /**
@@ -75,12 +93,35 @@ double IRJoystick::GetYDeadZoned()
  */
 double IRJoystick::GetZDeadZoned()
 {
-	return (abs(joystick.GetZ()) > kAxisDeadZone) ? joystick.GetZ() : 0.0;
+	return (abs(GetZ()) > kAxisDeadZone) ? GetZ() : 0.0;
+}
+
+/**
+ * Get the X2 value of the current joystick.
+ * This depends on the mapping of the joystick connected to the current port.
+ */
+double IRJoystick::GetX2DeadZoned()
+{
+	return (abs(GetX2()) > kAxisDeadZone) ? GetX2() : 0.0;
+}
+
+/**
+ * Get the Y2 value of the current joystick.
+ * This depends on the mapping of the joystick connected to the current port.
+ */
+double IRJoystick::GetY2DeadZoned()
+{
+	return -((abs(GetY2()) > kAxisDeadZone) ? GetY2(): 0.0);
 }
 
 double IRJoystick::GetRawAxis(uint32_t axis)
 {
 	return joystick.GetRawAxis(axis);
+}
+
+double IRJoystick::GetRawAxisDeadzoned(uint32_t axis)
+{
+	return (abs(GetRawAxis(axis)) > kAxisDeadZone) ? GetRawAxis(axis) : 0.0;
 }
 
 /**
@@ -108,7 +149,7 @@ double IRJoystick::GetThrottle()
  */
 double IRJoystick::GetLeveledThrottle()
 {
-	return LevelOut(joystick.GetThrottle());
+	return LevelOut(GetThrottle());
 }
 
 /**
