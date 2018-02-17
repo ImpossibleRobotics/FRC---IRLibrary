@@ -59,7 +59,7 @@ namespace IR {
 
 		static constexpr float kTriggerDeadZone = 0.6;
 		static constexpr float kAxisDeadZone = 0.20;
-		static constexpr uint32_t x2Axis = 3;
-		static constexpr uint32_t y2Axis = 4;
+		static constexpr uint32_t x2Axis = 4;
+		static constexpr uint32_t y2Axis = 5;
 	};
 }
