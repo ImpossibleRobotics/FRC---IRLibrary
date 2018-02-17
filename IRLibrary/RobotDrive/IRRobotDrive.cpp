@@ -295,7 +295,7 @@ void IRRobotDrive::TankDrive(IR::IRJoystick &stick, bool deadZoned)
 void IRRobotDrive::TankDrive(double y1, double y2, double t)
 {
 	float leftMotorsOutput = Limit(-(t * y1));
-	float rightMotorsOutput = Limit(t * y2);
+	float rightMotorsOutput = Limit(-(t * y2));
 
 	SetOutputMotors(leftMotorsOutput, rightMotorsOutput);
 }
